@@ -1,4 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -58,6 +60,9 @@ kotlin {
         // Optional properties
         // Configure the Pod name here instead of changing the Gradle project name
         name = "MyCocoaPod"
+        ios.deploymentTarget = "16.0"
+
+        podfile = project.file("../iosApp/Podfile")
 
         framework {
             // Required properties
