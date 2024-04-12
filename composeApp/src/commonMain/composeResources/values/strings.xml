@@ -4,7 +4,12 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
-    <string name="sign_up_description">Don't have an account? Click here to Sign Up!</string>
+    <string name="sign_up_description">Don't have an account?\nClick here to Sign Up!</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="arrow_back">Back Arrow icon</string>
+    <string name="day_tab">Day</string>
+    <string name="week_tab">Week</string>
+    <string name="month_tab">Month</string>
 </resources>
+
 

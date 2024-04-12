@@ -74,7 +74,7 @@ kotlin {
             isStatic = false
             // Dependency export
             //export(project(":anotherKMMModule"))
-            transitiveExport = false // This is default.
+            //transitiveExport = false // This is default.
             // Bitcode embedding
             //embedBitcode(BITCODE)
         }
@@ -99,6 +99,17 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            // Voyager
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.transitions)
+            //implementation(libs.voyager.koin)
+
+            // Koin
+            implementation(libs.koin.core)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

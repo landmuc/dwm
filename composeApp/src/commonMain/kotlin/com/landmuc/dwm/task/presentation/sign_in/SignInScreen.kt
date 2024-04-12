@@ -23,8 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
-import com.landmuc.dwm.core.theme.DWMTheme
+import com.landmuc.dwm.task.presentation.sign_up.SignUpScreen
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
@@ -32,83 +34,167 @@ import dwm.composeapp.generated.resources.sign_in
 import dwm.composeapp.generated.resources.sign_up_description
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun SignInScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            singleLine = true,
+object SignInScreen: Screen {
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.current
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = AccentViolet),
-                    shape = RoundedCornerShape(50)
-                ),
-            value = "value",
-            onValueChange = {},
-            placeholder = { Text(stringResource(Res.string.email)) },
-            leadingIcon =  { Icon(
-                imageVector = Icons.Default.Email,
-                contentDescription = stringResource(Res.string.email)
-            )}
-        )
-        OutlinedTextField(
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = AccentViolet),
-                    shape = RoundedCornerShape(50)
-                ),
-            value = "value",
-            onValueChange = {},
-            placeholder = { Text(stringResource(Res.string.password)) },
-            leadingIcon =  { Icon(
-                imageVector = Icons.Default.Lock,
-                contentDescription = stringResource(Res.string.password)
-            )},
-            visualTransformation = PasswordVisualTransformation() // masks the password input
-        )
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)
-        )
-        Button(
-            onClick = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 0.dp),
-            shape = RoundedCornerShape(50)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(Res.string.sign_in),
-                fontSize = 16.sp,
-                modifier = Modifier.padding(vertical = 6.dp)
+            OutlinedTextField(
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 4.dp)
+                    .border(
+                        BorderStroke(width = 2.dp, color = AccentViolet),
+                        shape = RoundedCornerShape(50)
+                    ),
+                value = "value",
+                onValueChange = {},
+                placeholder = { Text(stringResource(Res.string.email)) },
+                leadingIcon =  { Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = stringResource(Res.string.email)
+                )}
             )
-        }
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-        )
-        TextButton(
-            onClick = {}
-        ) {
-            Text(
-                text = stringResource(Res.string.sign_up_description),
-                fontSize = 16.sp
+            OutlinedTextField(
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 4.dp)
+                    .border(
+                        BorderStroke(width = 2.dp, color = AccentViolet),
+                        shape = RoundedCornerShape(50)
+                    ),
+                value = "value",
+                onValueChange = {},
+                placeholder = { Text(stringResource(Res.string.password)) },
+                leadingIcon =  { Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = stringResource(Res.string.password)
+                )},
+                visualTransformation = PasswordVisualTransformation() // masks the password input
             )
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+            )
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 0.dp),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text(
+                    text = stringResource(Res.string.sign_in),
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(vertical = 6.dp)
+                )
+            }
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+            )
+            TextButton(
+                onClick = { navigator?.push(SignUpScreen) },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(Res.string.sign_up_description),
+                    fontSize = 16.sp
+                )
+            }
         }
     }
+
 }
+
+//@OptIn(ExperimentalResourceApi::class)
+//@Composable
+//fun SignInScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        OutlinedTextField(
+//            singleLine = true,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp, 4.dp)
+//                .border(
+//                    BorderStroke(width = 2.dp, color = AccentViolet),
+//                    shape = RoundedCornerShape(50)
+//                ),
+//            value = "value",
+//            onValueChange = {},
+//            placeholder = { Text(stringResource(Res.string.email)) },
+//            leadingIcon =  { Icon(
+//                imageVector = Icons.Default.Email,
+//                contentDescription = stringResource(Res.string.email)
+//            )}
+//        )
+//        OutlinedTextField(
+//            singleLine = true,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp, 4.dp)
+//                .border(
+//                    BorderStroke(width = 2.dp, color = AccentViolet),
+//                    shape = RoundedCornerShape(50)
+//                ),
+//            value = "value",
+//            onValueChange = {},
+//            placeholder = { Text(stringResource(Res.string.password)) },
+//            leadingIcon =  { Icon(
+//                imageVector = Icons.Default.Lock,
+//                contentDescription = stringResource(Res.string.password)
+//            )},
+//            visualTransformation = PasswordVisualTransformation() // masks the password input
+//        )
+//        Spacer(modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(12.dp)
+//        )
+//        Button(
+//            onClick = {},
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp, 0.dp),
+//            shape = RoundedCornerShape(50)
+//        ) {
+//            Text(
+//                text = stringResource(Res.string.sign_in),
+//                fontSize = 16.sp,
+//                modifier = Modifier.padding(vertical = 6.dp)
+//            )
+//        }
+//        Spacer(modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(4.dp)
+//        )
+//        TextButton(
+//            onClick = {},
+//            modifier = Modifier
+//                .padding(horizontal = 16.dp)
+//        ) {
+//            Text(
+//                text = stringResource(Res.string.sign_up_description),
+//                fontSize = 16.sp
+//            )
+//        }
+//    }
+//}
 
 //@Preview()
 //@Composable
