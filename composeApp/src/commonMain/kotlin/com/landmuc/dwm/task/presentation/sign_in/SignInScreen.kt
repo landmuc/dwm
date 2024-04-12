@@ -1,0 +1,120 @@
+package com.landmuc.dwm.task.presentation.sign_in
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.landmuc.dwm.core.theme.AccentViolet
+import com.landmuc.dwm.core.theme.DWMTheme
+import dwm.composeapp.generated.resources.Res
+import dwm.composeapp.generated.resources.email
+import dwm.composeapp.generated.resources.password
+import dwm.composeapp.generated.resources.sign_in
+import dwm.composeapp.generated.resources.sign_up_description
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun SignInScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = AccentViolet),
+                    shape = RoundedCornerShape(50)
+                ),
+            value = "value",
+            onValueChange = {},
+            placeholder = { Text(stringResource(Res.string.email)) },
+            leadingIcon =  { Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = stringResource(Res.string.email)
+            )}
+        )
+        OutlinedTextField(
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = AccentViolet),
+                    shape = RoundedCornerShape(50)
+                ),
+            value = "value",
+            onValueChange = {},
+            placeholder = { Text(stringResource(Res.string.password)) },
+            leadingIcon =  { Icon(
+                imageVector = Icons.Default.Lock,
+                contentDescription = stringResource(Res.string.password)
+            )},
+            visualTransformation = PasswordVisualTransformation() // masks the password input
+        )
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+        )
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 0.dp),
+            shape = RoundedCornerShape(50)
+        ) {
+            Text(
+                text = stringResource(Res.string.sign_in),
+                fontSize = 16.sp,
+                modifier = Modifier.padding(vertical = 6.dp)
+            )
+        }
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+        )
+        TextButton(
+            onClick = {}
+        ) {
+            Text(
+                text = stringResource(Res.string.sign_up_description),
+                fontSize = 16.sp
+            )
+        }
+    }
+}
+
+//@Preview()
+//@Composable
+//fun SignInScreenPreview() {
+//    DWMTheme {
+//        SignInScreen()
+//    }
+//}
+
