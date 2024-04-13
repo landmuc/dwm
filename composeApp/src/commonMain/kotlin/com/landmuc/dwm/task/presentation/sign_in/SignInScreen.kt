@@ -27,6 +27,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
 import com.landmuc.dwm.task.presentation.sign_up.SignUpScreen
+import com.landmuc.dwm.task.presentation.task_tabs.TaskScreen
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
@@ -87,7 +88,7 @@ object SignInScreen: Screen {
                 .padding(12.dp)
             )
             Button(
-                onClick = {},
+                onClick = { navigator?.push(TaskScreen) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 0.dp),

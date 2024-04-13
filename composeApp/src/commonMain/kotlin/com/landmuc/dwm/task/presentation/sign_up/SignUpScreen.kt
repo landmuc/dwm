@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
@@ -31,6 +30,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
 import dwm.composeapp.generated.resources.Res
+import dwm.composeapp.generated.resources.arrow_back
 import dwm.composeapp.generated.resources.confirm_password
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
@@ -54,7 +54,7 @@ object SignUpScreen: Screen {
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = "Res.string.arrow_back"
+                                contentDescription = stringResource(Res.string.arrow_back)
                             )
                         }
                     }

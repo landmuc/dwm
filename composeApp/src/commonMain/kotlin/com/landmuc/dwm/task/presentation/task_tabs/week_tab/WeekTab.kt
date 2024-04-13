@@ -13,8 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import dwm.composeapp.generated.resources.Res
+import dwm.composeapp.generated.resources.week_tab
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 // object -> doesn't hold arguments and is not going to be reused
+@OptIn(ExperimentalResourceApi::class)
 object WeekTab: Tab {
     @Composable
     override fun Content() {
@@ -29,14 +34,14 @@ object WeekTab: Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Res.string.week_tab"
-            val icon = rememberVectorPainter(Icons.Sharp.AccountBox)
+            val title = stringResource(Res.string.week_tab)
+            //val icon = rememberVectorPainter(Icons.Sharp.AccountBox)
 
             return remember {
                 TabOptions(
                     index = 1u,
                     title = title,
-                    icon = icon
+                    icon = null
                 )
             }
         }
