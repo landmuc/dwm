@@ -1,6 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE
-import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -9,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 kotlin {
@@ -110,10 +109,17 @@ kotlin {
             // Koin
             implementation(libs.koin.core)
 
+            // Ktor
+            implementation("io.ktor:ktor-client-core:3.0.0-wasm2")
+            // Supabase
+            implementation("io.github.jan-tennert.supabase:gotrue-kt:2.2.3-wasm0")
+            implementation("io.github.jan-tennert.supabase:postgrest-kt:2.2.3-wasm0")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
+        //jsMain.dependencies {  }
     }
 
     task("testClasses")

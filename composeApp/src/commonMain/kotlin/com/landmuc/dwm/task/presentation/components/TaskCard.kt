@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.landmuc.dwm.core.presentation.gradientSurface
+import com.landmuc.dwm.core.theme.AccentViolet
 
 @Composable
 fun taskCard(
