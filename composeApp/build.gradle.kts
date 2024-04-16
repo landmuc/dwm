@@ -89,8 +89,14 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Ktor
+            implementation("io.ktor:ktor-client-android:3.0.0-wasm2")
         }
-        iosMain.dependencies { }
+        iosMain.dependencies {
+            // Ktor
+            implementation("io.ktor:ktor-client-darwin:3.0.0-wasm2")
+        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -111,6 +117,10 @@ kotlin {
 
             // Ktor
             implementation("io.ktor:ktor-client-core:3.0.0-wasm2")
+            implementation("io.ktor:ktor-client-content-negotiation:3.0.0-wasm2")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0-wasm2")
+
+
             // Supabase
             implementation("io.github.jan-tennert.supabase:gotrue-kt:2.2.3-wasm0")
             implementation("io.github.jan-tennert.supabase:postgrest-kt:2.2.3-wasm0")
@@ -119,7 +129,9 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-        //jsMain.dependencies {  }
+        jsMain.dependencies {
+            implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
+        }
     }
 
     task("testClasses")
