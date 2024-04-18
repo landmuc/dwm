@@ -40,35 +40,47 @@ import dwm.composeapp.generated.resources.password
 import dwm.composeapp.generated.resources.sign_up
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.koin.mp.KoinPlatform
 
 object SignUpScreen: Screen {
-    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.current
+        val signUpScreenModel: SignUpScreenModel = KoinPlatform.getKoin().get()
+        val screenModel = rememberScreenModel { signUpScreenModel }
 
-        val screenModel = rememberScreenModel { SignUpScreenModel() }
-        val email by screenModel.emailInput.collectAsState()
-        val password by screenModel.passwordInput.collectAsState()
-        val passwordConfirm by screenModel.passwordConfirmInput.collectAsState()
+        SignUpScreenRoot(screenModel = screenModel)
+    }
+}
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.sign_up))},
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { navigator?.pop() }
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = stringResource(Res.string.arrow_back)
-                            )
-                        }
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun SignUpScreenRoot(
+    screenModel: SignUpScreenModel
+) {
+    val navigator = LocalNavigator.current
+
+    val email by screenModel.emailInput.collectAsState()
+    val password by screenModel.passwordInput.collectAsState()
+    val passwordConfirm by screenModel.passwordConfirmInput.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(Res.string.sign_up))},
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navigator?.pop() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(Res.string.arrow_back)
+                        )
                     }
-                )
-            }
-        ) {
+                }
+            )
+        }
+    ) {
 
         Column(
             modifier = Modifier
@@ -139,7 +151,7 @@ object SignUpScreen: Screen {
                 .padding(12.dp)
             )
             Button(
-                onClick = screenModel::testSignUp,
+                onClick = screenModel::signUp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 0.dp),
@@ -153,14 +165,4 @@ object SignUpScreen: Screen {
             }
         }
     }
-    }
 }
-
-
-//@Preview()
-//@Composable
-//fun SignUpScreenPreview() {
-//    DWMTheme {
-//        SignUpScreen()
-//    }
-//}

@@ -89,7 +89,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-
+            // Koin
+            implementation(libs.koin.android)
             // Ktor
             implementation("io.ktor:ktor-client-android:3.0.0-wasm2")
         }
@@ -104,27 +105,22 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
             // Voyager
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
             //implementation(libs.voyager.koin)
-
             // Koin
             implementation(libs.koin.core)
-
+            implementation(libs.koin.compose)
             // Ktor
             implementation("io.ktor:ktor-client-core:3.0.0-wasm2")
             implementation("io.ktor:ktor-client-content-negotiation:3.0.0-wasm2")
             implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0-wasm2")
-
-
             // Supabase
             implementation("io.github.jan-tennert.supabase:gotrue-kt:2.2.3-wasm0")
             implementation("io.github.jan-tennert.supabase:postgrest-kt:2.2.3-wasm0")
-
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

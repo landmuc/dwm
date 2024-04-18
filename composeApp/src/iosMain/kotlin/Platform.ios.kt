@@ -1,3 +1,5 @@
+import com.landmuc.dwm.di.sharedModule
+import org.koin.core.context.startKoin
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -5,3 +7,9 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+//fun initKoin() {
+//    startKoin {
+//        modules(sharedModule)
+//    }
+//}
