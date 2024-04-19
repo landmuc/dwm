@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.landmuc.dwm.task.data.remote.SupabaseClient
 import com.landmuc.dwm.task.data.repository.AuthenticationRepositoryImpl
 import com.landmuc.dwm.task.domain.remote.AuthenticationRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,10 +17,13 @@ class SignInScreenModel(
 ): ScreenModel {
 
     private val _emailInput = MutableStateFlow("")
-    val emailInput: StateFlow<String> = _emailInput.asStateFlow()
+    val emailInput = _emailInput.asStateFlow()
 
     private val _passwordInput = MutableStateFlow("")
     val passwordInput = _passwordInput.asStateFlow()
+
+    private val _validSignIn = MutableStateFlow(false)
+    val validSignIn = _validSignIn.asStateFlow()
 
     fun updateEmailInput(email: String) {
         _emailInput.update { email }
@@ -30,10 +34,13 @@ class SignInScreenModel(
 
     fun signIn() {
         screenModelScope.launch {
-            authRep.signIn(
+            val signInJob = async{
+                authRep.signIn(
                 email = _emailInput.value,
                 password = _passwordInput.value
-            )
+                )
+            }
+            _validSignIn.update { signInJob.await() }
         }
     }
 }

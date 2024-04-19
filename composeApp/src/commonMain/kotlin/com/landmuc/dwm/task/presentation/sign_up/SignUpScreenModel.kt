@@ -2,9 +2,9 @@ package com.landmuc.dwm.task.presentation.sign_up
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.landmuc.dwm.task.data.remote.SupabaseClient
-import com.landmuc.dwm.task.data.repository.AuthenticationRepositoryImpl
 import com.landmuc.dwm.task.domain.remote.AuthenticationRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +24,9 @@ class SignUpScreenModel(
     private val _passwordConfirmInput = MutableStateFlow("")
     val passwordConfirmInput = _passwordConfirmInput.asStateFlow()
 
+    private val _validSignUp = MutableStateFlow(false)
+    val validSignUp = _validSignUp.asStateFlow()
+
     fun updateEmailInput(email: String) {
         _emailInput.update { email }
     }
@@ -36,11 +39,18 @@ class SignUpScreenModel(
 
     fun signUp() {
         screenModelScope.launch {
-            authRep.signUp(
-                email = _emailInput.value,
-                password = _passwordInput.value
-            )
+            val signOutJob = async {
+                authRep.signUp(
+                    email = _emailInput.value,
+                    password = _passwordInput.value
+                )
+            }
+            _validSignUp.update { signOutJob.await() }
         }
+    }
+
+    fun setValidSignUpFalse() {
+        _validSignUp.update { false }
     }
 
 }

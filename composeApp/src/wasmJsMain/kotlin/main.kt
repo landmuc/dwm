@@ -5,6 +5,8 @@ import org.koin.core.context.startKoin
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    initKoin()
+
     CanvasBasedWindow(canvasElementId = "ComposeTarget") { App() }
 }
 

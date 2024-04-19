@@ -14,6 +14,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -23,8 +26,11 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +44,8 @@ import dwm.composeapp.generated.resources.confirm_password
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
 import dwm.composeapp.generated.resources.sign_up
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.koin.mp.KoinPlatform
@@ -58,13 +66,20 @@ object SignUpScreen: Screen {
 fun SignUpScreenRoot(
     screenModel: SignUpScreenModel
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val controller = LocalSoftwareKeyboardController.current
+
     val navigator = LocalNavigator.current
 
     val email by screenModel.emailInput.collectAsState()
     val password by screenModel.passwordInput.collectAsState()
     val passwordConfirm by screenModel.passwordConfirmInput.collectAsState()
+    val validSignUp by screenModel.validSignUp.collectAsState()
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.sign_up))},
@@ -151,7 +166,26 @@ fun SignUpScreenRoot(
                 .padding(12.dp)
             )
             Button(
-                onClick = screenModel::signUp,
+                onClick = {
+                    controller?.hide()
+                    screenModel.signUp()
+                    if (validSignUp) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "$validSignUp -> You successfully singed up! Log in on the first screen!",
+                                duration = SnackbarDuration.Long
+                            )
+                        }
+                    } else {
+                       scope.launch {
+                           snackbarHostState.showSnackbar(
+                               message = "$validSignUp -> Something went wrong. You could not sign up.",
+                               duration = SnackbarDuration.Short
+                           )
+                       }
+                    }
+                    screenModel.setValidSignUpFalse()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 0.dp),

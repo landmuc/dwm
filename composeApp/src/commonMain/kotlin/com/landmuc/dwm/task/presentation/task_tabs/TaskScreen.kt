@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
@@ -55,7 +56,8 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
         selected = tabNavigator.current == tab,
         onClick = { tabNavigator.current = tab},
         label = { Text(tab.options.title)},
-        unselectedContentColor = DarkGrey,
+        selectedContentColor = Color.Green,
+        unselectedContentColor = Color.White,
         icon = {
             tab.options.icon?.let {
                 Icon(

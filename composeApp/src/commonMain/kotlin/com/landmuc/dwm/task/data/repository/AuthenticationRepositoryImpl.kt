@@ -21,7 +21,7 @@ class AuthenticationRepositoryImpl(
         }
     }
 
-    override suspend fun signUp(email: String, password: String): Boolean {
+override suspend fun signUp(email: String, password: String): Boolean {
         return try {
             client.client.auth.signUpWith(Email) {
                 this.email = email

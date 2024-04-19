@@ -10,6 +10,9 @@ import androidx.compose.ui.graphics.Color
 
 // use composed{} for stateful custom modifiers
 // otherwise Modifier.customMod(): Modifier = this.background is sufficient
+
+
+// NOT USED AT THIS MOMENT
 fun Modifier.gradientSurface(): Modifier = composed {
     if (isSystemInDarkTheme()) {
         this.then(

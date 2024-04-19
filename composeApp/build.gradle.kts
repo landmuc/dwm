@@ -46,6 +46,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            binaryOption("bundleId", "com.landmuc.dwm.composeApp")
         }
     }
 
@@ -113,11 +114,11 @@ kotlin {
             //implementation(libs.voyager.koin)
             // Koin
             implementation(libs.koin.core)
-            implementation(libs.koin.compose)
+            //implementation(libs.koin.compose)
             // Ktor
-            implementation("io.ktor:ktor-client-core:3.0.0-wasm2")
-            implementation("io.ktor:ktor-client-content-negotiation:3.0.0-wasm2")
-            implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0-wasm2")
+            implementation("io.ktor:ktor-client-core:3.0.0-beta-1")
+            implementation("io.ktor:ktor-client-content-negotiation:3.0.0-beta-1")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0-beta-1")
             // Supabase
             implementation("io.github.jan-tennert.supabase:gotrue-kt:2.2.3-wasm0")
             implementation("io.github.jan-tennert.supabase:postgrest-kt:2.2.3-wasm0")
@@ -125,8 +126,13 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-        jsMain.dependencies {
-            implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
+//        jsMain.dependencies {
+//            implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
+//        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
+            }
         }
     }
 

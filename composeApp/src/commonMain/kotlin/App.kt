@@ -1,7 +1,7 @@
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.landmuc.dwm.core.theme.DWMTheme
 import com.landmuc.dwm.task.presentation.sign_in.SignInScreen
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -11,8 +11,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    // before MaterialTheme {}
-    DWMTheme {
+
+    MaterialTheme {
        Navigator(SignInScreen) { navigator ->
            SlideTransition(navigator)
        }
