@@ -73,7 +73,6 @@ fun SignInScreenRoot(
 
     val email by screenModel.emailInput.collectAsState()
     val password by screenModel.passwordInput.collectAsState()
-    val validSignIn by screenModel.validSignIn.collectAsState()
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState)}
@@ -133,15 +132,16 @@ fun SignInScreenRoot(
             Button(
                 onClick = {
                     controller?.hide()
-                    screenModel.signIn()
-                    if (validSignIn) {
-                        navigator?.push(TaskScreen)
-                    } else {
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = "Invalid email and/or password!",
-                                duration = SnackbarDuration.Short
-                            )
+                    screenModel.signIn { signInResult ->
+                        if (signInResult) {
+                            navigator?.push(TaskScreen)
+                        } else {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Invalid email and/or password!",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
                     }
                 },

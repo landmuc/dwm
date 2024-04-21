@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -76,7 +77,6 @@ fun SignUpScreenRoot(
     val email by screenModel.emailInput.collectAsState()
     val password by screenModel.passwordInput.collectAsState()
     val passwordConfirm by screenModel.passwordConfirmInput.collectAsState()
-    val validSignUp by screenModel.validSignUp.collectAsState()
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -96,7 +96,6 @@ fun SignUpScreenRoot(
             )
         }
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -168,23 +167,23 @@ fun SignUpScreenRoot(
             Button(
                 onClick = {
                     controller?.hide()
-                    screenModel.signUp()
-                    if (validSignUp) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = "$validSignUp -> You successfully singed up! Log in on the first screen!",
-                                duration = SnackbarDuration.Long
-                            )
+                    screenModel.signUp { signUpResult ->
+                        if (signUpResult) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "$signUpResult -> You successfully signed up! Log in on the first screen!",
+                                    duration = SnackbarDuration.Long
+                                )
+                            }
+                        } else {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "$signUpResult -> Something went wrong. You could not sign up.",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
-                    } else {
-                       scope.launch {
-                           snackbarHostState.showSnackbar(
-                               message = "$validSignUp -> Something went wrong. You could not sign up.",
-                               duration = SnackbarDuration.Short
-                           )
-                       }
                     }
-                    screenModel.setValidSignUpFalse()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

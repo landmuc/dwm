@@ -22,9 +22,6 @@ class SignInScreenModel(
     private val _passwordInput = MutableStateFlow("")
     val passwordInput = _passwordInput.asStateFlow()
 
-    private val _validSignIn = MutableStateFlow(false)
-    val validSignIn = _validSignIn.asStateFlow()
-
     fun updateEmailInput(email: String) {
         _emailInput.update { email }
     }
@@ -32,15 +29,14 @@ class SignInScreenModel(
         _passwordInput.update { password }
     }
 
-    fun signIn() {
+    fun signIn(onResult: (Boolean) -> Unit ) {
         screenModelScope.launch {
-            val signInJob = async{
+            val signInResult =
                 authRep.signIn(
-                email = _emailInput.value,
-                password = _passwordInput.value
+                    email = _emailInput.value,
+                    password = _passwordInput.value
                 )
-            }
-            _validSignIn.update { signInJob.await() }
+            onResult( signInResult )
         }
     }
 }
