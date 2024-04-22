@@ -13,6 +13,9 @@
     <string name="invalid_sign_in">Invalid email and/or password!</string>
     <string name="valid_sign_up">You successfully singed up! Log in on the first screen!</string>
     <string name="invalid_sign_up">Something went wrong. You could not sign up.</string>
+    <string name="invalid_email">Invalid email! Please provide a valid email!</string>
+    <string name="invalid_password">Invalid password! Your password must be at least six characters long!</string>
+    <string name="invalid_password_match">Your passwords do not match! Please provide matching passwords!</string>
 </resources>
 
 

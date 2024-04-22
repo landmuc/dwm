@@ -2,7 +2,11 @@ package com.landmuc.dwm.task.presentation.sign_up
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.landmuc.dwm.task.domain.SignUpResult
 import com.landmuc.dwm.task.domain.remote.AuthenticationRepository
+import com.landmuc.dwm.task.domain.use_case.ConfirmPassword
+import com.landmuc.dwm.task.domain.use_case.ValidateEmail
+import com.landmuc.dwm.task.domain.use_case.ValidatePassword
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +16,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignUpScreenModel(
-    private val authRep: AuthenticationRepository
+    private val authRep: AuthenticationRepository,
+    private val validateEmail: ValidateEmail,
+    private val validatePassword: ValidatePassword,
+    private val confirmPassword: ConfirmPassword
 ): ScreenModel {
 
     private val _emailInput = MutableStateFlow("")
@@ -35,14 +42,28 @@ class SignUpScreenModel(
         _passwordConfirmInput.update { password }
     }
 
-    fun signUp(onResult: (Boolean) -> Unit) {
+    fun signUp(onResult: (SignUpResult) -> Unit, ) {
+
+        if (!validateEmail(_emailInput.value)) { return onResult(SignUpResult.InvalidEmail) }
+
+        if (!validatePassword(_passwordInput.value)) { return onResult(SignUpResult.InvalidPassword) }
+
+        if (!confirmPassword(_passwordInput.value, _passwordConfirmInput.value)) { return onResult(SignUpResult.InvalidPasswordMatch) }
+
+        if (validateEmail(_emailInput.value) &&
+            validatePassword(_passwordInput.value) &&
+            confirmPassword(_passwordInput.value, _passwordConfirmInput.value)
+        ) { return onResult(SignUpResult.ValidCredentials) }
+    }
+
+    fun signUpRequest(onResult: (Boolean) -> Unit) {
         screenModelScope.launch {
             val signUpResult =
                 authRep.signUp(
                     email = _emailInput.value,
                     password = _passwordInput.value
                 )
-            onResult( signUpResult )
+            onResult(signUpResult)
         }
     }
 

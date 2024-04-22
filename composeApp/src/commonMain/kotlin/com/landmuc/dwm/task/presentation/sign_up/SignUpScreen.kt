@@ -39,6 +39,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
+import com.landmuc.dwm.task.domain.SignUpResult
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.arrow_back
 import dwm.composeapp.generated.resources.confirm_password
@@ -168,21 +169,52 @@ fun SignUpScreenRoot(
                 onClick = {
                     controller?.hide()
                     screenModel.signUp { signUpResult ->
-                        if (signUpResult) {
-                            scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    message = "$signUpResult -> You successfully signed up! Log in on the first screen!",
-                                    duration = SnackbarDuration.Long
-                                )
+                        when (signUpResult) {
+                            is SignUpResult.InvalidEmail -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Invalid email! Please provide a valid email!",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
                             }
-                        } else {
-                            scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    message = "$signUpResult -> Something went wrong. You could not sign up.",
-                                    duration = SnackbarDuration.Short
-                                )
+                            is SignUpResult.InvalidPassword -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Invalid password! Your password must be at least six characters long!",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                            is SignUpResult.InvalidPasswordMatch -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Your passwords do not match! Please provide matching passwords!",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                            is SignUpResult.ValidCredentials -> {
+                                screenModel.signUpRequest { signUpRequestResult ->
+                                if (signUpRequestResult) {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "You successfully signed up! Log in on the first screen!",
+                                            duration = SnackbarDuration.Long
+                                        )
+                                    }
+                                } else {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "Something went wrong. You could not sign up.",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
+                                }
                             }
                         }
+
                     }
                 },
                 modifier = Modifier
