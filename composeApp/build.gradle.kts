@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    kotlin("plugin.serialization") version "1.9.22"
+    //kotlin("plugin.serialization") version "1.9.22"
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -93,11 +94,11 @@ kotlin {
             // Koin
             implementation(libs.koin.android)
             // Ktor
-            implementation("io.ktor:ktor-client-android:3.0.0-wasm2")
+            implementation(libs.ktor.client.android)
         }
         iosMain.dependencies {
             // Ktor
-            implementation("io.ktor:ktor-client-darwin:3.0.0-wasm2")
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -116,12 +117,12 @@ kotlin {
             implementation(libs.koin.core)
             //implementation(libs.koin.compose)
             // Ktor
-            implementation("io.ktor:ktor-client-core:3.0.0-beta-1")
-            implementation("io.ktor:ktor-client-content-negotiation:3.0.0-beta-1")
-            implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0-beta-1")
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
             // Supabase
-            implementation("io.github.jan-tennert.supabase:gotrue-kt:2.2.3-wasm0")
-            implementation("io.github.jan-tennert.supabase:postgrest-kt:2.2.3-wasm0")
+            implementation(libs.gotrue.kt)
+            implementation(libs.postgrest.kt)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -131,7 +132,7 @@ kotlin {
 //        }
         val wasmJsMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
+                implementation(libs.ktor.client.js)
             }
         }
     }

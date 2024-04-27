@@ -1,4 +1,4 @@
-package com.landmuc.dwm.task.domain.use_case
+package com.landmuc.dwm.authentication.domain.use_case
 
 class ConfirmPassword {
     operator fun invoke(

@@ -1,7 +1,7 @@
 package com.landmuc.dwm.task.domain.model
 
-enum class TaskGroup {
-    DAY,
-    WEEK,
-    MONTH
+enum class TaskGroup(string: String) {
+    DAY("DAY"),
+    WEEK("WEEK"),
+    MONTH("MONTH")
 }

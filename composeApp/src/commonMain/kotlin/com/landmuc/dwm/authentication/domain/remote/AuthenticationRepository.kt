@@ -1,4 +1,4 @@
-package com.landmuc.dwm.task.domain.remote
+package com.landmuc.dwm.authentication.domain.remote
 
 interface AuthenticationRepository {
     suspend fun signIn(email: String, password: String): Boolean

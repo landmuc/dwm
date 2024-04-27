@@ -16,6 +16,8 @@
     <string name="invalid_email">Invalid email! Please provide a valid email!</string>
     <string name="invalid_password">Invalid password! Your password must be at least six characters long!</string>
     <string name="invalid_password_match">Your passwords do not match! Please provide matching passwords!</string>
+    <string name="floating_action_button">Floating action button.</string>
+    <string name="add_task">Add task</string>
 </resources>
 
 

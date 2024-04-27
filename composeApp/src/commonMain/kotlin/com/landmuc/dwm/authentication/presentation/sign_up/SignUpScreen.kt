@@ -1,4 +1,4 @@
-package com.landmuc.dwm.task.presentation.sign_up
+package com.landmuc.dwm.authentication.presentation.sign_up
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -24,7 +24,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,21 +31,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
-import com.landmuc.dwm.task.domain.SignUpResult
+import com.landmuc.dwm.authentication.domain.event.SignUpResult
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.arrow_back
 import dwm.composeapp.generated.resources.confirm_password
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
 import dwm.composeapp.generated.resources.sign_up
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource

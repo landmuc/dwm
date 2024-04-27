@@ -20,7 +20,7 @@ import com.landmuc.dwm.core.theme.AccentViolet
 @Composable
 fun taskCard(
     taskTitle: String,
-    timeDue: String?,
+    dateDue: String?,
     isDone: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -43,7 +43,7 @@ fun taskCard(
                 modifier = Modifier.gradientSurface()
             ) {
                 Text(
-                    text = timeDue ?: "No due time added",
+                    text = dateDue ?: "No due time added",
                     color = Color.LightGray,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium

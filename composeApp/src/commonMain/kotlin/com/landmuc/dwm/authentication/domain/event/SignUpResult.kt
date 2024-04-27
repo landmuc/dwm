@@ -1,4 +1,4 @@
-package com.landmuc.dwm.task.domain
+package com.landmuc.dwm.authentication.domain.event
 
 sealed class SignUpResult {
     data object InvalidEmail: SignUpResult()

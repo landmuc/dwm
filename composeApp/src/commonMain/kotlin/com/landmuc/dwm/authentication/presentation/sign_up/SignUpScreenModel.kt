@@ -1,14 +1,12 @@
-package com.landmuc.dwm.task.presentation.sign_up
+package com.landmuc.dwm.authentication.presentation.sign_up
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.landmuc.dwm.task.domain.SignUpResult
-import com.landmuc.dwm.task.domain.remote.AuthenticationRepository
-import com.landmuc.dwm.task.domain.use_case.ConfirmPassword
-import com.landmuc.dwm.task.domain.use_case.ValidateEmail
-import com.landmuc.dwm.task.domain.use_case.ValidatePassword
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+import com.landmuc.dwm.authentication.domain.event.SignUpResult
+import com.landmuc.dwm.authentication.domain.remote.AuthenticationRepository
+import com.landmuc.dwm.authentication.domain.use_case.ConfirmPassword
+import com.landmuc.dwm.authentication.domain.use_case.ValidateEmail
+import com.landmuc.dwm.authentication.domain.use_case.ValidatePassword
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,7 +46,8 @@ class SignUpScreenModel(
 
         if (!validatePassword(_passwordInput.value)) { return onResult(SignUpResult.InvalidPassword) }
 
-        if (!confirmPassword(_passwordInput.value, _passwordConfirmInput.value)) { return onResult(SignUpResult.InvalidPasswordMatch) }
+        if (!confirmPassword(_passwordInput.value, _passwordConfirmInput.value)) { return onResult(
+            SignUpResult.InvalidPasswordMatch) }
 
         if (validateEmail(_emailInput.value) &&
             validatePassword(_passwordInput.value) &&

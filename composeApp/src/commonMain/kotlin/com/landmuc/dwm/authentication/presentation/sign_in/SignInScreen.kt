@@ -1,4 +1,4 @@
-package com.landmuc.dwm.task.presentation.sign_in
+package com.landmuc.dwm.authentication.presentation.sign_in
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -36,8 +36,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
-import com.landmuc.dwm.task.presentation.sign_up.SignUpScreen
-import com.landmuc.dwm.task.presentation.task_tabs.TaskScreen
+import com.landmuc.dwm.authentication.presentation.sign_up.SignUpScreen
+import com.landmuc.dwm.task.presentation.TaskScreen
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password

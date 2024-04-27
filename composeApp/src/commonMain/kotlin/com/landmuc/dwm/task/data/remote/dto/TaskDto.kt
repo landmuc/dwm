@@ -1,8 +1,11 @@
-package com.landmuc.dwm.task.domain.model
+package com.landmuc.dwm.task.data.remote.dto
 
-data class Task(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TaskDto(
     val taskId: Int,
-    val taskGroup: TaskGroup,
+    val taskGroup: String,
     val taskTitle: String,
     val taskFurtherInformation: String?,
     val dateCreated: String,
