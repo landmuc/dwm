@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -137,7 +138,7 @@ fun SignUpScreenRoot(
                     imageVector = Icons.Default.Lock,
                     contentDescription = stringResource(Res.string.password)
                 )},
-                //visualTransformation = PasswordVisualTransformation() // masks the password input
+                visualTransformation = PasswordVisualTransformation() // masks the password input
             )
             // text field to confirm password above
             OutlinedTextField(
@@ -156,7 +157,7 @@ fun SignUpScreenRoot(
                     imageVector = Icons.Default.Lock,
                     contentDescription = stringResource(Res.string.confirm_password)
                 )},
-                //visualTransformation = PasswordVisualTransformation() // masks the password input
+                visualTransformation = PasswordVisualTransformation() // masks the password input
             )
             Spacer(modifier = Modifier
                 .fillMaxWidth()

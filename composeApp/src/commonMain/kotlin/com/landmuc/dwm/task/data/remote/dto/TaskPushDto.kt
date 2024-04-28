@@ -8,5 +8,5 @@ data class TaskPushDto(
     val taskTitle: String,
     val taskFurtherInformation: String?,
     val dateDue: String?,
-    val isDone: Boolean = false
+    val isDone: Boolean
 )

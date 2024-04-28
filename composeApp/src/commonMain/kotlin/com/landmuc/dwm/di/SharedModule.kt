@@ -8,6 +8,8 @@ import com.landmuc.dwm.authentication.domain.use_case.ValidateEmail
 import com.landmuc.dwm.authentication.domain.use_case.ValidatePassword
 import com.landmuc.dwm.authentication.presentation.sign_in.SignInScreenModel
 import com.landmuc.dwm.authentication.presentation.sign_up.SignUpScreenModel
+import com.landmuc.dwm.core.remote.SupabaseAuth
+import com.landmuc.dwm.core.remote.SupabasePostgrest
 import com.landmuc.dwm.task.data.repository.TaskDataRepositoryImpl
 import com.landmuc.dwm.task.domain.remote.TaskDataRepository
 import com.landmuc.dwm.task.presentation.TaskScreenModel
@@ -17,6 +19,8 @@ import org.koin.dsl.module
 
 val supabaseClientModule = module {
     single { SupabaseClient }
+    single { SupabaseAuth(get()) }
+    single { SupabasePostgrest(get()) }
 }
 
 val authRepModule = module {

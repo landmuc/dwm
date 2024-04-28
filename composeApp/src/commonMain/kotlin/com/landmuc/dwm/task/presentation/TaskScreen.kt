@@ -10,11 +10,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -44,10 +46,14 @@ object TaskScreen: Screen {
 private fun TaskScreenRoot(
     screenModel: TaskScreenModel
 ) {
+    val controller = LocalSoftwareKeyboardController.current
+
     val taskList by screenModel.taskList.collectAsState()
     val taskTitle by screenModel.taskTitle.collectAsState()
     val taskFurtherInformation by screenModel.taskFurtherInformation.collectAsState()
     val isExpanded by screenModel.isExpanded.collectAsState()
+
+    LaunchedEffect(isExpanded) { screenModel.getTaskList() }
 
     TabNavigator(DayTab(taskList)) {
         Scaffold(
@@ -67,7 +73,10 @@ private fun TaskScreenRoot(
                 ExpandingFab(
                     isExpanded = isExpanded,
                     onExpand = screenModel::onExpand,
-                    addTask = screenModel::addTask,
+                    addTask = {
+                        screenModel.addTask()
+                        controller?.hide()
+                    },
                     taskTitle = taskTitle,
                     onTaskTitleChange = screenModel::updateTaskTitle,
                     taskFurtherInformation = taskFurtherInformation,

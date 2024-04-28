@@ -41,13 +41,11 @@ class SignUpScreenModel(
     }
 
     fun signUp(onResult: (SignUpResult) -> Unit, ) {
-
         if (!validateEmail(_emailInput.value)) { return onResult(SignUpResult.InvalidEmail) }
 
         if (!validatePassword(_passwordInput.value)) { return onResult(SignUpResult.InvalidPassword) }
 
-        if (!confirmPassword(_passwordInput.value, _passwordConfirmInput.value)) { return onResult(
-            SignUpResult.InvalidPasswordMatch) }
+        if (!confirmPassword(_passwordInput.value, _passwordConfirmInput.value)) { return onResult(SignUpResult.InvalidPasswordMatch) }
 
         if (validateEmail(_emailInput.value) &&
             validatePassword(_passwordInput.value) &&

@@ -18,6 +18,7 @@ fun TaskLazyColumn(
         items(items = taskList) {task ->
             taskCard(
                 taskTitle = task.taskTitle,
+                taskFurtherInformation = task.taskFurtherInformation,
                 dateDue = task.dateDue,
                 isDone = task.isDone
             )
