@@ -12,10 +12,10 @@ class SignInScreenModel(
     private val authRep: AuthenticationRepository
 ): ScreenModel {
 
-    private val _emailInput = MutableStateFlow("")
+    private val _emailInput = MutableStateFlow("test@test.com")
     val emailInput = _emailInput.asStateFlow()
 
-    private val _passwordInput = MutableStateFlow("")
+    private val _passwordInput = MutableStateFlow("test123")
     val passwordInput = _passwordInput.asStateFlow()
 
     fun updateEmailInput(email: String) {

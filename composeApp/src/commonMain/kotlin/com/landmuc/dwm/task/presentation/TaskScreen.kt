@@ -53,7 +53,7 @@ private fun TaskScreenRoot(
     val taskFurtherInformation by screenModel.taskFurtherInformation.collectAsState()
     val isExpanded by screenModel.isExpanded.collectAsState()
 
-    LaunchedEffect(isExpanded) { screenModel.getTaskList() }
+   // LaunchedEffect(isExpanded) { screenModel.getTaskList() }
 
     TabNavigator(DayTab(taskList)) {
         Scaffold(

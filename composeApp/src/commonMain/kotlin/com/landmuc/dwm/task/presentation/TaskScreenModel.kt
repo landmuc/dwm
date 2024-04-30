@@ -3,19 +3,31 @@ package com.landmuc.dwm.task.presentation
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.landmuc.dwm.task.data.mapper.toTask
+import com.landmuc.dwm.task.data.remote.dto.TaskDto
 import com.landmuc.dwm.task.domain.model.Task
 import com.landmuc.dwm.task.domain.remote.TaskDataRepository
+import io.github.jan.supabase.annotations.SupabaseExperimental
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.postgresChangeFlow
+import io.github.jan.supabase.realtime.postgresListDataFlow
+import io.github.jan.supabase.realtime.realtime
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(SupabaseExperimental::class)
 class TaskScreenModel(
-    private val taskRep: TaskDataRepository
+    private val taskRep: TaskDataRepository,
+    private val client: com.landmuc.dwm.core.remote.SupabaseClient
 ): ScreenModel {
 
     private val _taskTitle = MutableStateFlow("")
@@ -30,15 +42,25 @@ class TaskScreenModel(
     private val _taskList: MutableStateFlow<List<Task>> = MutableStateFlow(listOf())
     val taskList = _taskList.asStateFlow()
 
-    init {
-        getTaskList()
-    }
-    fun getTaskList() {
+
+    val getTaskListJob =
         screenModelScope.launch {
-            val serverTaskList = taskRep.getTasks(tableName = "tasks")
-            _taskList.emit(serverTaskList.map { taskDto -> taskDto.toTask() })
+            val channel = client.supabaseClient.channel("taskChannel")
+            val taskDtoListFlow: Flow<List<TaskDto>> = channel.postgresListDataFlow(
+                schema = "public",
+                table = "tasks",
+                primaryKey = TaskDto::taskId
+            )
+
+            taskDtoListFlow.collect { serverTaskList ->
+                val updatedTaskList: List<Task> = serverTaskList.map { taskDto -> taskDto.toTask() }
+                _taskList.update { updatedTaskList }
+            }
+
+            channel.subscribe()
         }
-    }
+
+
 
     fun addTask() {
         screenModelScope.launch {
@@ -64,7 +86,7 @@ class TaskScreenModel(
     fun deleteTask(taskId: Int) {
         screenModelScope.launch {
             taskRep.deleteTask(tableName = "tasks", taskId = taskId)
-            getTaskList()
+            //getTaskList()
         }
     }
     fun updateTaskTitle(taskTitle: String) {

@@ -123,13 +123,12 @@ kotlin {
             // Supabase
             implementation(libs.gotrue.kt)
             implementation(libs.postgrest.kt)
+            implementation(libs.realtime.kt)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-//        jsMain.dependencies {
-//            implementation("io.ktor:ktor-client-js:3.0.0-wasm2")
-//        }
+
         val wasmJsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)

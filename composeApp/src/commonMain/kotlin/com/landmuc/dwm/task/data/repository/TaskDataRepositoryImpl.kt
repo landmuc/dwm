@@ -1,22 +1,26 @@
 package com.landmuc.dwm.task.data.repository
 
 import com.landmuc.dwm.core.remote.SupabaseClient
-import com.landmuc.dwm.core.remote.SupabasePostgrest
 import com.landmuc.dwm.task.data.mapper.toTask
 import com.landmuc.dwm.task.data.remote.dto.TaskDto
 import com.landmuc.dwm.task.data.remote.dto.TaskPushDto
 import com.landmuc.dwm.task.domain.model.Task
 import com.landmuc.dwm.task.domain.remote.TaskDataRepository
-import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.decodeOldRecord
+import io.github.jan.supabase.realtime.decodeRecord
+import io.github.jan.supabase.realtime.postgresChangeFlow
+import io.github.jan.supabase.realtime.realtime
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class TaskDataRepositoryImpl(
-    private val postgrest: SupabasePostgrest
+    private val client: SupabaseClient
 ): TaskDataRepository {
     override suspend fun getTasks(tableName: String): List<TaskDto> {
-        return postgrest.postgrest.from(tableName).select().decodeList<TaskDto>()
+        return client.supabaseClient.postgrest.from(tableName).select().decodeList<TaskDto>()
     }
 
     override suspend fun addTask(
@@ -35,12 +39,30 @@ class TaskDataRepositoryImpl(
             isDone = isDone
         )
 
-        postgrest.postgrest.from(tableName).insert(task)
+        client.supabaseClient.postgrest.from(tableName).insert(task)
     }
 
     override suspend fun deleteTask(tableName: String, taskId: Int) {
-        postgrest.postgrest.from(tableName).delete {
+        client.supabaseClient.postgrest.from(tableName).delete {
             filter { eq("taskId", taskId) }
         }
     }
+
+    suspend fun getTaskList(): Flow<Task> {
+        val channel = client.supabaseClient.realtime.channel("taskChannel")
+        val changeFlow = channel.postgresChangeFlow<PostgresAction>(schema = "public") {
+            table = "tasks"
+        }.map {
+            when(it) {
+                is PostgresAction.Insert -> it.decodeRecord<TaskDto>().toTask()
+                is PostgresAction.Delete -> it.decodeOldRecord<TaskDto>().toTask()
+                is PostgresAction.Update -> it.decodeRecord<TaskDto>().toTask()
+                is PostgresAction.Select -> error("Select should not be possible")
+            }
+        }
+        //channel.subscribe()
+        return changeFlow
+    }
+
+
 }
