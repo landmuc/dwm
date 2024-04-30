@@ -16,7 +16,7 @@ fun TaskLazyColumn(
         modifier = Modifier.padding(top= 20.dp, bottom = 20.dp)
     ) {
         items(items = taskList) {task ->
-            taskCard(
+            TaskCard(
                 taskTitle = task.taskTitle,
                 taskFurtherInformation = task.taskFurtherInformation,
                 dateDue = task.dateDue,

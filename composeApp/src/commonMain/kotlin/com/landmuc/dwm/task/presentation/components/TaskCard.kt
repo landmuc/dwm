@@ -1,60 +1,73 @@
 package com.landmuc.dwm.task.presentation.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Checkbox
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.landmuc.dwm.core.presentation.gradientSurface
-import com.landmuc.dwm.core.theme.AccentViolet
 
 @Composable
-fun taskCard(
+fun TaskCard(
     taskTitle: String,
     taskFurtherInformation: String?,
     dateDue: String?,
     isDone: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp ),
-        elevation = 5.dp
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        elevation = 4.dp,
+        shape = MaterialTheme.shapes.medium
     ) {
-        Column() {
-            Box() {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = isDone,
+                onCheckedChange = {!isDone}
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = taskTitle,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = if (isDone) TextDecoration.LineThrough else TextDecoration.None
                 )
-            }
-            Box() {
-                Column {
+                if (taskFurtherInformation != null) {
                     Text(
-                        text = taskFurtherInformation ?: "No further Information added",
-                        color = Color.LightGray,
+                        text = taskFurtherInformation,
+                        color = Color.Gray,
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = dateDue ?: "No due time added",
-                        color = Color.LightGray,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Normal
                     )
                 }
+            }
+            if (dateDue != null) {
+                Text(
+                    text = dateDue,
+                    color = Color.LightGray,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
     }

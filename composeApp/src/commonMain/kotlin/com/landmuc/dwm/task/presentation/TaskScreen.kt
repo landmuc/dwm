@@ -1,12 +1,15 @@
 package com.landmuc.dwm.task.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Colors
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +27,8 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.landmuc.dwm.core.theme.LightBlue
+import com.landmuc.dwm.core.theme.TextBlack
 import com.landmuc.dwm.task.domain.model.Task
 import com.landmuc.dwm.task.domain.model.TaskGroup
 import com.landmuc.dwm.task.presentation.components.ExpandingFab
@@ -52,8 +57,6 @@ private fun TaskScreenRoot(
     val taskTitle by screenModel.taskTitle.collectAsState()
     val taskFurtherInformation by screenModel.taskFurtherInformation.collectAsState()
     val isExpanded by screenModel.isExpanded.collectAsState()
-
-   // LaunchedEffect(isExpanded) { screenModel.getTaskList() }
 
     TabNavigator(DayTab(taskList)) {
         Scaffold(
@@ -94,11 +97,12 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     val tabNavigator = LocalTabNavigator.current
 
     BottomNavigationItem(
+        modifier = Modifier.background(MaterialTheme.colors.primary),
         selected = tabNavigator.current == tab,
         onClick = { tabNavigator.current = tab},
         label = { Text(tab.options.title)},
-        selectedContentColor = Color.Green,
-        unselectedContentColor = Color.White,
+        selectedContentColor = TextBlack,
+        unselectedContentColor = LightBlue,
         icon = {
             tab.options.icon?.let {
                 Icon(

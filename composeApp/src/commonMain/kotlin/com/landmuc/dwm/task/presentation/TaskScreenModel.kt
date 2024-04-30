@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -36,6 +37,9 @@ class TaskScreenModel(
     private val _taskFurtherInformation = MutableStateFlow("")
     val taskFurtherInformation = _taskFurtherInformation.asStateFlow()
 
+    private val _isDone = MutableStateFlow(false)
+    val isDone = _isDone.asStateFlow()
+
     private val _isExpanded = MutableStateFlow(false)
     val isExpanded = _isExpanded.asStateFlow()
 
@@ -43,9 +47,14 @@ class TaskScreenModel(
     val taskList = _taskList.asStateFlow()
 
 
-    val getTaskListJob =
+    init {
+        getFlow()
+        subscribeToChannel()
+    }
+
+    val channel = client.supabaseClient.realtime.channel("taskChannel")
+    fun getFlow() {
         screenModelScope.launch {
-            val channel = client.supabaseClient.channel("taskChannel")
             val taskDtoListFlow: Flow<List<TaskDto>> = channel.postgresListDataFlow(
                 schema = "public",
                 table = "tasks",
@@ -57,9 +66,13 @@ class TaskScreenModel(
                 _taskList.update { updatedTaskList }
             }
 
+        }
+    }
+    fun subscribeToChannel() {
+        screenModelScope.launch {
             channel.subscribe()
         }
-
+    }
 
 
     fun addTask() {
@@ -95,8 +108,7 @@ class TaskScreenModel(
     fun updateTaskFurtherInformation(taskFurtherInformation: String) {
         _taskFurtherInformation.update { taskFurtherInformation }
     }
-    fun onExpand() {
-        _isExpanded.update { !_isExpanded.value }
-    }
+    fun checkTask() { _isDone.update { !_isDone.value } }
+    fun onExpand() { _isExpanded.update { !_isExpanded.value } }
 
 }
