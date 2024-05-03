@@ -10,7 +10,9 @@ import com.landmuc.dwm.task.domain.model.Task
 
 @Composable
 fun TaskLazyColumn(
-    taskList: List<Task>
+    taskList: List<Task>,
+    onCheckedChange: (task: Task) -> Unit,
+    deleteTask: (task: Task) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.padding(top= 20.dp, bottom = 20.dp)
@@ -20,7 +22,9 @@ fun TaskLazyColumn(
                 taskTitle = task.taskTitle,
                 taskFurtherInformation = task.taskFurtherInformation,
                 dateDue = task.dateDue,
-                isDone = task.isDone
+                isDone = task.isDone,
+                onCheckedChange = { onCheckedChange(task) },
+                deleteTask = { deleteTask(task) }
             )
         }
     }

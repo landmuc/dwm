@@ -14,6 +14,15 @@ interface TaskDataRepository {
         dateDue: String?,
         isDone: Boolean
     )
-
     suspend fun deleteTask(tableName: String, taskId: Int)
+    suspend fun updateTask(
+        tableName: String,
+        task: Task,
+        taskGroup: String? = null,
+        taskTitle: String? = null,
+        taskFurtherInformation: String? = null,
+        dateCreated: String? = null,
+        dateDue: String? = null,
+        isDone: Boolean? = null
+    )
 }

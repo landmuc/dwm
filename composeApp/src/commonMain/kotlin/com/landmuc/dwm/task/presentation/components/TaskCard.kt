@@ -1,5 +1,6 @@
 package com.landmuc.dwm.task.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,9 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.landmuc.dwm.task.domain.model.Task
 
 @Composable
 fun TaskCard(
@@ -27,12 +33,15 @@ fun TaskCard(
     taskFurtherInformation: String?,
     dateDue: String?,
     isDone: Boolean,
+    onCheckedChange: () -> Unit,
+    deleteTask: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onCheckedChange() },
         elevation = 4.dp,
         shape = MaterialTheme.shapes.medium
     ) {
@@ -42,7 +51,7 @@ fun TaskCard(
         ) {
             Checkbox(
                 checked = isDone,
-                onCheckedChange = {!isDone}
+                onCheckedChange = {}
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -61,6 +70,15 @@ fun TaskCard(
                     )
                 }
             }
+            IconButton(
+               onClick =  deleteTask
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete Task"
+                )
+            }
+            Text(text = isDone.toString())
             if (dateDue != null) {
                 Text(
                     text = dateDue,

@@ -13,11 +13,17 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalResourceApi::class)
 data class DayTab(
-    val taskList: List<Task>
+    val taskList: List<Task>,
+    val onCheckedChange: (Task) -> Unit,
+    val deleteTask: (Task) -> Unit
 ): Tab {
     @Composable
     override fun Content() {
-        TaskLazyColumn(taskList = taskList)
+        TaskLazyColumn(
+            taskList = taskList,
+            onCheckedChange = onCheckedChange,
+            deleteTask = deleteTask
+            )
     }
 
     override val options: TabOptions

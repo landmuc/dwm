@@ -1,20 +1,11 @@
 package com.landmuc.dwm.task.data.repository
 
 import com.landmuc.dwm.core.remote.SupabaseClient
-import com.landmuc.dwm.task.data.mapper.toTask
 import com.landmuc.dwm.task.data.remote.dto.TaskDto
 import com.landmuc.dwm.task.data.remote.dto.TaskPushDto
 import com.landmuc.dwm.task.domain.model.Task
 import com.landmuc.dwm.task.domain.remote.TaskDataRepository
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.realtime.PostgresAction
-import io.github.jan.supabase.realtime.channel
-import io.github.jan.supabase.realtime.decodeOldRecord
-import io.github.jan.supabase.realtime.decodeRecord
-import io.github.jan.supabase.realtime.postgresChangeFlow
-import io.github.jan.supabase.realtime.realtime
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class TaskDataRepositoryImpl(
     private val client: SupabaseClient
@@ -47,22 +38,31 @@ class TaskDataRepositoryImpl(
             filter { eq("taskId", taskId) }
         }
     }
+    override suspend fun updateTask(
+        tableName: String,
+        task: Task,
+        taskGroup: String?,
+        taskTitle: String?,
+        taskFurtherInformation: String?,
+        dateCreated: String?,
+        dateDue: String?,
+        isDone: Boolean?
+        ) {
+        val updatedTaskGroup = taskGroup ?: task.taskGroup.name
+        val updatedTaskTitle = taskTitle ?: task.taskTitle
+        val updatedTaskFurtherInformation = taskFurtherInformation ?: task.taskFurtherInformation
+        val updatedDateDue = dateDue ?: task.dateDue
+        val updatedIsDone = isDone ?: task.isDone
 
-    suspend fun getTaskList(): Flow<Task> {
-        val channel = client.supabaseClient.realtime.channel("taskChannel")
-        val changeFlow = channel.postgresChangeFlow<PostgresAction>(schema = "public") {
-            table = "tasks"
-        }.map {
-            when(it) {
-                is PostgresAction.Insert -> it.decodeRecord<TaskDto>().toTask()
-                is PostgresAction.Delete -> it.decodeOldRecord<TaskDto>().toTask()
-                is PostgresAction.Update -> it.decodeRecord<TaskDto>().toTask()
-                is PostgresAction.Select -> error("Select should not be possible")
+        client.supabaseClient.postgrest.from(tableName).update(
+            {
+                set("taskGroup", updatedTaskGroup)
+                set("taskTitle", updatedTaskTitle)
+                set("taskFurtherInformation", updatedTaskFurtherInformation)
+                set("dateDue", updatedDateDue)
+                set("isDone", updatedIsDone)
             }
-        }
-        //channel.subscribe()
-        return changeFlow
+        ) { filter { eq("taskId", task.taskId) } }
     }
-
 
 }

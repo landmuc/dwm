@@ -20,6 +20,7 @@
     <string name="add_task">Add task</string>
     <string name="fab_task">Task:</string>
     <string name="fab_further_information">Further information:</string>
+    <string name="task_not_found">Task to delete could not be found.</string>
 </resources>
 
 

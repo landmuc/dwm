@@ -58,7 +58,22 @@ private fun TaskScreenRoot(
     val taskFurtherInformation by screenModel.taskFurtherInformation.collectAsState()
     val isExpanded by screenModel.isExpanded.collectAsState()
 
-    TabNavigator(DayTab(taskList)) {
+    LaunchedEffect(Unit) {
+        screenModel.getTasks()
+        screenModel.connectToRealTime()
+    }
+
+    TabNavigator(
+        DayTab(
+            taskList,
+            onCheckedChange = {task ->
+                screenModel.updateTask(task = task, isDone = !task.isDone)
+            },
+            deleteTask = {task ->
+                screenModel.deleteTask(taskId = task.taskId)
+            }
+        )
+    ) {
         Scaffold(
             content = { CurrentTab() },
             bottomBar = {
@@ -67,7 +82,17 @@ private fun TaskScreenRoot(
                         .padding(10.dp)
                         .clip(RoundedCornerShape(50)),
                 ) {
-                    TabNavigationItem(DayTab(taskList))
+                    TabNavigationItem(
+                        DayTab(
+                            taskList,
+                            onCheckedChange = {task ->
+                                screenModel.updateTask(task = task, isDone = !task.isDone)
+                            },
+                            deleteTask = {task ->
+                                screenModel.deleteTask(taskId = task.taskId)
+                            }
+                        )
+                    )
                     TabNavigationItem(WeekTab)
                     TabNavigationItem(MonthTab)
                 }
