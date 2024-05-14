@@ -57,14 +57,18 @@ private fun TaskScreenRoot(
     val taskTitle by screenModel.taskTitle.collectAsState()
     val taskFurtherInformation by screenModel.taskFurtherInformation.collectAsState()
     val isExpanded by screenModel.isExpanded.collectAsState()
+    val action by screenModel.action.collectAsState()
 
     LaunchedEffect(Unit) {
-        screenModel.getTasks()
-        screenModel.connectToRealTime()
+        //screenModel.getTasks()
+        //screenModel.connectToRealTime(this)
+        screenModel.getFlow()
+        screenModel.subscribeToChannel()
     }
 
     TabNavigator(
         DayTab(
+            action = action,
             taskList,
             onCheckedChange = {task ->
                 screenModel.updateTask(task = task, isDone = !task.isDone)
@@ -84,6 +88,7 @@ private fun TaskScreenRoot(
                 ) {
                     TabNavigationItem(
                         DayTab(
+                            action = action,
                             taskList,
                             onCheckedChange = {task ->
                                 screenModel.updateTask(task = task, isDone = !task.isDone)

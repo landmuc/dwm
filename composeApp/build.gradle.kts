@@ -94,7 +94,8 @@ kotlin {
             // Koin
             implementation(libs.koin.android)
             // Ktor
-            implementation(libs.ktor.client.android)
+            //implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
             // Ktor

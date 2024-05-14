@@ -1,5 +1,7 @@
 package com.landmuc.dwm.task.presentation.task_tabs.day_tab
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -13,17 +15,21 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalResourceApi::class)
 data class DayTab(
+    val action: String,
     val taskList: List<Task>,
     val onCheckedChange: (Task) -> Unit,
     val deleteTask: (Task) -> Unit
 ): Tab {
     @Composable
     override fun Content() {
-        TaskLazyColumn(
-            taskList = taskList,
-            onCheckedChange = onCheckedChange,
-            deleteTask = deleteTask
+        Column() {
+            Text(action)
+            TaskLazyColumn(
+                taskList = taskList,
+                onCheckedChange = onCheckedChange,
+                deleteTask = deleteTask
             )
+        }
     }
 
     override val options: TabOptions

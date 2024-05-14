@@ -13,15 +13,20 @@ import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.decodeRecord
 import io.github.jan.supabase.realtime.postgresChangeFlow
+import io.github.jan.supabase.realtime.postgresListDataFlow
 import io.github.jan.supabase.realtime.realtime
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 @OptIn(SupabaseExperimental::class)
 class TaskScreenModel(
     private val taskRep: TaskDataRepository,
@@ -40,48 +45,52 @@ class TaskScreenModel(
     private val _taskList: MutableStateFlow<List<Task>> = MutableStateFlow(listOf())
     val taskList = _taskList.asStateFlow()
 
+    private val _action = MutableStateFlow("NO ACTION YET!")
+    val action = _action.asStateFlow()
 
-//    init {
-//        subscribeToChannel()
-//    }
+
 
     val channel = client.supabaseClient.realtime.channel("taskChannel")
-//    val getFlow =
-//        screenModelScope.launch {
-//            val taskDtoListFlow: Flow<List<TaskDto>> = channel.postgresListDataFlow(
-//                schema = "public",
-//                table = "tasks",
-//                primaryKey = TaskDto::taskId
-//            )
-//
-//            taskDtoListFlow.collect { serverTaskList ->
-//                val updatedTaskList: List<Task> = serverTaskList.map { taskDto -> taskDto.toTask() }
-//                _taskList.update { updatedTaskList }
-//            }
-//
-//        }
-//
-//
-//    fun subscribeToChannel() {
-//        screenModelScope.launch {
-//            channel.subscribe()
-//        }
-//    }
-
-    fun connectToRealTime() {
+    fun getFlow() {
         screenModelScope.launch {
-        channel.postgresChangeFlow<PostgresAction>("public") { table = "tasks"}.onEach {
-            when(it) {
-                is PostgresAction.Delete -> error("Delete should not be possible")
-                is PostgresAction.Insert -> _taskList.value += it.decodeRecord<TaskDto>().toTask()
-                is PostgresAction.Select -> error("Select should not be possible")
-                is PostgresAction.Update -> error("Update should not be possible")
-            }
-        }.launchIn(screenModelScope)
+            val taskDtoListFlow: Flow<List<TaskDto>> = channel.postgresListDataFlow(
+                schema = "public",
+                table = "tasks",
+                primaryKey = TaskDto::taskId
+            )
 
-        channel.subscribe()
+            taskDtoListFlow.collect { serverTaskList ->
+                val updatedTaskList: List<Task> = serverTaskList.map { taskDto -> taskDto.toTask() }
+                _taskList.update { updatedTaskList }
+            }
+
         }
     }
+
+
+    fun subscribeToChannel() {
+        screenModelScope.launch {
+            channel.subscribe()
+        }
+    }
+
+//    val channel = client.supabaseClient.channel("taskChannel")
+//    fun connectToRealTime(scope: CoroutineScope) {
+//        screenModelScope.launch {
+//
+//            val dataFlow = channel.postgresChangeFlow<PostgresAction>("public") { table = "tasks" }
+//                dataFlow.collect() {
+//                    when (it) {
+//                        is PostgresAction.Delete -> _action.value = "DELETE"
+//                        is PostgresAction.Insert -> _taskList.value += it.decodeRecord<TaskDto>().toTask()
+//                        is PostgresAction.Select -> error("Select should not be possible")
+//                        is PostgresAction.Update -> _action.value = "UPDATE"
+//                    }
+//                }
+//
+//            //channel.subscribe()
+//        }
+//    }
 
 
     fun getTasks() {
@@ -147,3 +156,4 @@ class TaskScreenModel(
     fun onExpand() { _isExpanded.update { !_isExpanded.value } }
 
 }
+
