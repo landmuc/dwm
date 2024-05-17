@@ -11,22 +11,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.landmuc.dwm.core.koin.koinViewModel
 import com.landmuc.dwm.task.domain.model.Task
 import com.landmuc.dwm.task.presentation.components.ExpandingFab
 import com.landmuc.dwm.task.presentation.components.TaskLazyColumn
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 
-@Composable
-fun SecondTestScreen() {
-    KoinContext {
-        SecondTestScreenRoot()
-    }
-}
+//@Composable
+//fun SecondTestScreen() {
+//    KoinContext {
+//        SecondTestScreenRoot()
+//    }
+//}
 
 @Composable
-fun SecondTestScreenRoot(
-    viewModel: SecondTestScreenModel = koinInject()
+fun SecondTestScreen(
+    viewModel: SecondTestScreenModel = koinViewModel<SecondTestScreenModel>()
 ) {
     val controller = LocalSoftwareKeyboardController.current
 
