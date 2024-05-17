@@ -48,15 +48,19 @@ import dwm.composeapp.generated.resources.sign_up
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 import org.koin.mp.KoinPlatform
 
 object SignUpScreen: Screen {
     @Composable
     override fun Content() {
-        val signUpScreenModel: SignUpScreenModel = KoinPlatform.getKoin().get()
-        val screenModel = rememberScreenModel { signUpScreenModel }
+        KoinContext {
+//            val signUpScreenModel: SignUpScreenModel = KoinPlatform.getKoin().get()
+//            val screenModel = rememberScreenModel { signUpScreenModel }
 
-        SignUpScreenRoot(screenModel = screenModel)
+            SignUpScreenRoot()
+        }
     }
 }
 
@@ -64,7 +68,7 @@ object SignUpScreen: Screen {
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SignUpScreenRoot(
-    screenModel: SignUpScreenModel
+    screenModel: SignUpScreenModel = koinInject()
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }

@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    //kotlin("plugin.serialization") version "1.9.22"
     alias(libs.plugins.kotlinxSerialization)
 }
 
@@ -93,6 +92,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             // Koin
             implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
             // Ktor
             //implementation(libs.ktor.client.android)
             implementation(libs.ktor.client.okhttp)
@@ -115,8 +115,8 @@ kotlin {
             implementation(libs.voyager.transitions)
             //implementation(libs.voyager.koin)
             // Koin
-            implementation(libs.koin.core)
-            //implementation(libs.koin.compose)
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
             // Ktor
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -125,6 +125,10 @@ kotlin {
             implementation(libs.gotrue.kt)
             implementation(libs.postgrest.kt)
             implementation(libs.realtime.kt)
+            // Lifecycle ViewModel
+            implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-beta02")
+            // Compose Navigation
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha03")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

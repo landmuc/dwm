@@ -13,37 +13,19 @@ import dwm.composeapp.generated.resources.day_tab
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
-data class DayTab(
-    val action: String,
-    val taskList: List<Task>,
-    val onCheckedChange: (Task) -> Unit,
-    val deleteTask: (Task) -> Unit
-): Tab {
-    @Composable
-    override fun Content() {
-        Column() {
-            Text(action)
-            TaskLazyColumn(
-                taskList = taskList,
-                onCheckedChange = onCheckedChange,
-                deleteTask = deleteTask
-            )
-        }
+@Composable
+fun DayTab(
+    action: String,
+    taskList: List<Task>,
+    onCheckedChange: (Task) -> Unit,
+    deleteTask: (Task) -> Unit
+) {
+    Column() {
+        Text(action)
+        TaskLazyColumn(
+            taskList = taskList,
+            onCheckedChange = onCheckedChange,
+            deleteTask = deleteTask
+        )
     }
-
-    override val options: TabOptions
-        @Composable
-        get() {
-            val title = stringResource(Res.string.day_tab)
-            //val icon = rememberVectorPainter(Icons.Sharp.Warning)
-
-            return remember {
-                TabOptions(
-                    index = 0u,
-                    title = title,
-                    icon = null
-                )
-            }
-        }
 }

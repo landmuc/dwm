@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
@@ -46,23 +45,29 @@ import dwm.composeapp.generated.resources.sign_up_description
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
-import org.koin.mp.KoinPlatform
+import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 
-object SignInScreen: Screen {
-    @Composable
-    override fun Content() {
-        val signInScreenModel: SignInScreenModel = KoinPlatform.getKoin().get()
-        val screenModel = rememberScreenModel { signInScreenModel }
-
-        SignInScreenRoot(screenModel = screenModel)
-    }
+@Composable
+fun SignInScreen(
+    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit
+) {
+        KoinContext {
+            SignInScreenRoot(
+                onSignInClick = onSignInClick,
+                onSignUpClick = onSignUpClick
+            )
+        }
 }
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SignInScreenRoot(
-    screenModel: SignInScreenModel
+    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit,
+    screenModel: SignInViewModel = koinInject()
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -134,7 +139,7 @@ fun SignInScreenRoot(
                     controller?.hide()
                     screenModel.signIn { signInResult ->
                         if (signInResult) {
-                            navigator?.push(TaskScreen)
+                            onSignInClick()
                         } else {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
@@ -162,7 +167,7 @@ fun SignInScreenRoot(
                     .padding(4.dp)
             )
             TextButton(
-                onClick = { navigator?.push(SignUpScreen) },
+                onClick = { onSignUpClick() },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
             ) {
