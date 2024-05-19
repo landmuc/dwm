@@ -35,8 +35,8 @@ class TaskViewModel(
     private val _taskList: MutableStateFlow<List<Task>> = MutableStateFlow(listOf())
     val taskList = _taskList.asStateFlow()
 
-    private val _action = MutableStateFlow("NO ACTION YET!")
-    val action = _action.asStateFlow()
+    private val _channelIsSubscribed = MutableStateFlow(false)
+    val channelIsSubscribed = _channelIsSubscribed.asStateFlow()
 
 
 
@@ -61,27 +61,9 @@ class TaskViewModel(
     fun subscribeToChannel() {
         viewModelScope.launch {
             channel.subscribe()
+            _channelIsSubscribed.update { true }
         }
     }
-
-//    val channel = client.supabaseClient.channel("taskChannel")
-//    fun connectToRealTime(scope: CoroutineScope) {
-//        viewModelScope.launch {
-//
-//            val dataFlow = channel.postgresChangeFlow<PostgresAction>("public") { table = "tasks" }
-//                dataFlow.collect() {
-//                    when (it) {
-//                        is PostgresAction.Delete -> _action.value = "DELETE"
-//                        is PostgresAction.Insert -> _taskList.value += it.decodeRecord<TaskDto>().toTask()
-//                        is PostgresAction.Select -> error("Select should not be possible")
-//                        is PostgresAction.Update -> _action.value = "UPDATE"
-//                    }
-//                }
-//
-//            //channel.subscribe()
-//        }
-//    }
-
 
     fun getTasks() {
         viewModelScope.launch {

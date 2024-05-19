@@ -32,11 +32,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
-import com.landmuc.dwm.authentication.presentation.sign_up.SignUpScreen
-import com.landmuc.dwm.task.presentation.TaskScreen
+import com.landmuc.dwm.core.koin.koinViewModel
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.email
 import dwm.composeapp.generated.resources.password
@@ -45,36 +42,19 @@ import dwm.composeapp.generated.resources.sign_up_description
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.KoinContext
-import org.koin.compose.koinInject
-
-@Composable
-fun SignInScreen(
-    onSignInClick: () -> Unit,
-    onSignUpClick: () -> Unit
-) {
-        KoinContext {
-            SignInScreenRoot(
-                onSignInClick = onSignInClick,
-                onSignUpClick = onSignUpClick
-            )
-        }
-}
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignInScreenRoot(
+fun SignInScreen(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    screenModel: SignInViewModel = koinInject()
+    screenModel: SignInViewModel = koinViewModel<SignInViewModel>()
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val controller = LocalSoftwareKeyboardController.current
-
-    val navigator = LocalNavigator.current
 
     val email by screenModel.emailInput.collectAsState()
     val password by screenModel.passwordInput.collectAsState()

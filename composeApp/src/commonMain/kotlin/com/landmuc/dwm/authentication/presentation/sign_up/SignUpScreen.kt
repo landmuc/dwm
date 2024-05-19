@@ -34,11 +34,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import com.landmuc.dwm.core.theme.AccentViolet
 import com.landmuc.dwm.authentication.domain.event.SignUpResult
+import com.landmuc.dwm.core.koin.koinViewModel
 import dwm.composeapp.generated.resources.Res
 import dwm.composeapp.generated.resources.arrow_back
 import dwm.composeapp.generated.resources.confirm_password
@@ -48,34 +46,17 @@ import dwm.composeapp.generated.resources.sign_up
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.KoinContext
-import org.koin.compose.koinInject
-import org.koin.mp.KoinPlatform
-
-object SignUpScreen: Screen {
-    @Composable
-    override fun Content() {
-        KoinContext {
-//            val signUpScreenModel: SignUpScreenModel = KoinPlatform.getKoin().get()
-//            val screenModel = rememberScreenModel { signUpScreenModel }
-
-            SignUpScreenRoot()
-        }
-    }
-}
-
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignUpScreenRoot(
-    screenModel: SignUpScreenModel = koinInject()
+fun SignUpScreen(
+    onBackClick: () -> Unit,
+    screenModel: SignUpViewModel = koinViewModel<SignUpViewModel>()
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val controller = LocalSoftwareKeyboardController.current
-
-    val navigator = LocalNavigator.current
 
     val email by screenModel.emailInput.collectAsState()
     val password by screenModel.passwordInput.collectAsState()
@@ -88,7 +69,7 @@ fun SignUpScreenRoot(
                 title = { Text(stringResource(Res.string.sign_up))},
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator?.pop() }
+                        onClick = onBackClick
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,

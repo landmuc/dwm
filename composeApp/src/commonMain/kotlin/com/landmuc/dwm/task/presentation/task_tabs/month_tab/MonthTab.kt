@@ -1,48 +1,41 @@
 package com.landmuc.dwm.task.presentation.task_tabs.month_tab
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.ShoppingCart
-import androidx.compose.material.icons.sharp.Warning
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
-import dwm.composeapp.generated.resources.Res
-import dwm.composeapp.generated.resources.month_tab
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.landmuc.dwm.core.koin.koinViewModel
+import com.landmuc.dwm.task.domain.model.Task
+import com.landmuc.dwm.task.presentation.TaskViewModel
+import com.landmuc.dwm.task.presentation.components.TaskLazyColumn
 
-// object -> doesn't hold arguments and is not going to be reused
-@OptIn(ExperimentalResourceApi::class)
-object MonthTab: Tab {
-    @Composable
-    override fun Content() {
-      Box(
-          modifier = Modifier.fillMaxSize(),
-          contentAlignment = Alignment.Center
-      ) {
-          Text("Month Tab")
-      }
-    }
+@Composable
+fun MonthTab(
+    viewModel: TaskViewModel = koinViewModel<TaskViewModel>()
+) {
+    val controller = LocalSoftwareKeyboardController.current
 
-    override val options: TabOptions
-        @Composable
-        get() {
-            val title = stringResource(Res.string.month_tab)
-            //val icon = rememberVectorPainter(Icons.Sharp.ShoppingCart)
+    val taskList by viewModel.taskList.collectAsState()
+    val taskTitle by viewModel.taskTitle.collectAsState()
+    val taskFurtherInformation by viewModel.taskFurtherInformation.collectAsState()
+    val isExpanded by viewModel.isExpanded.collectAsState()
 
-            return remember {
-                TabOptions(
-                    index = 2u,
-                    title = title,
-                    icon = null
-                )
+//    LaunchedEffect(Unit) {
+//        viewModel.getFlow()
+//        viewModel.subscribeToChannel()
+//    }
+
+    Column() {
+        TaskLazyColumn(
+            taskList = taskList,
+            onCheckedChange = { task ->
+                viewModel.updateTask(task, isDone = !task.isDone)
+            },
+            deleteTask = { task ->
+                viewModel.deleteTask(taskId = task.taskId)
             }
-        }
+        )
+    }
 }
